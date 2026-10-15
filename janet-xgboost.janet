@@ -93,10 +93,8 @@
 
 (defn/typed check-handle {:args [:any :keyword] :ret :any} [x kind]
   "Type-guard error class: every dmatrix/booster-taking fn raises on
-  a wrong-kind, missing-:ptr or non-pointer-:ptr argument (presence
-  alone let forged structs through to a crash or a silent garbage
-  handle before v1.3; a real handle's :ptr is
-  :pointer-typed)."
+  a wrong-kind, missing-:ptr or non-pointer-:ptr argument (a real
+  handle's :ptr is :pointer-typed)."
   (unless (and (or (struct? x) (table? x))
                (= :pointer (type (get x :ptr)))
                (= kind (get x :kind)))
