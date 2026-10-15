@@ -2,7 +2,7 @@
 
 Typed xgboost bindings for Janet over the pinned C API, via core ffi -
 no jpm native module, no C build. libxgboost 3.4.1 is pinned to the
-official universal wheel artifact (sha256-verified installer), so
+official wheels (sha256-verified installer), so
 predictions are bitwise-identical to the official python binding on
 the same wheel - the official python binding is the external
 cross-check, and the conformance is checked bitwise, not to a
@@ -114,7 +114,8 @@ jpm install https://github.com/jennystats/janet-xgboost
 ```
 
 Lib resolution at import: `$XGBOOST_LIB`, then
-`~/.local/lib/xgboost/xgboost/lib/libxgboost.so`, then the system
+`~/.local/lib/xgboost/xgboost/lib/libxgboost.so` (Linux) or
+`libxgboost.dylib` (macOS), then the system
 dlopen search. The import fails with an actionable message if none
 loads.
 

@@ -14,6 +14,10 @@
 set -e
 VERSION="3.4.1"
 DEST="$HOME/.local/lib/xgboost"
+# stock macOS has no sha256sum; its perl-based shasum reads the same
+# "<hash>  <path>" checklist format
+CHECKSUM="sha256sum"
+[ "$(uname -s)" = Darwin ] && CHECKSUM="shasum -a 256"
 
 OS="$(uname -s)"
 ARCH="$(uname -m)"
@@ -49,7 +53,7 @@ trap 'rm -rf "$TMP"' EXIT
 
 echo "fetching xgboost v${VERSION} for $OS/$ARCH (official wheel) ..."
 curl -fsSL -o "$TMP/$WHEEL" "$URL"
-echo "$SHA256  $TMP/$WHEEL" | sha256sum -c -
+echo "$SHA256  $TMP/$WHEEL" | $CHECKSUM -c -
 
 mkdir -p "$DEST"
 case "$OS" in

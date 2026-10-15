@@ -5,7 +5,7 @@ DIR="$(cd "$(dirname "$0")" && pwd)"
 [ -n "$JANET_PATH" ] || export JANET_PATH="$HOME/.local/lib/janet"
 export JANET_PATH="$DIR:$JANET_PATH"
 
-has_xgboost() { { [ -n "$XGBOOST_LIB" ] || [ -f "$HOME/.local/lib/xgboost/xgboost/lib/libxgboost.so" ] || ldconfig -p 2>/dev/null | grep -q libxgboost; } && { [ -n "$JANET_NUM_LIB" ] || [ -f "$HOME/.local/lib/janet-num/libjn.so" ]; }; }
+has_xgboost() { { [ -n "$XGBOOST_LIB" ] || [ -f "$HOME/.local/lib/xgboost/xgboost/lib/libxgboost.so" ] || [ -f "$HOME/.local/lib/xgboost/xgboost/lib/libxgboost.dylib" ] || ldconfig -p 2>/dev/null | grep -q libxgboost; } && { [ -n "$JANET_NUM_LIB" ] || [ -f "$HOME/.local/lib/janet-num/libjn.so" ]; }; }
 
 fail=0
 if has_xgboost; then

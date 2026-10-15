@@ -30,8 +30,10 @@ pinned to libxgboost 3.4.1 from
   janet-num's pack kernel (section 7). The module imports janet-num;
   xgboost without janet-num does not load.
 - **Lib resolution** at import: `$XGBOOST_LIB` then
-  `~/.local/lib/xgboost/xgboost/lib/libxgboost.so` (the wheel's
-  auditwheel layout) then the system dlopen search. The load is probed
+  `~/.local/lib/xgboost/xgboost/lib/libxgboost.so` (Linux; the
+  wheel's auditwheel layout) or `libxgboost.dylib` (macOS; the mac
+  wheel's self-contained layout) then the system dlopen search. The
+  load is probed
   before the ffi context is set; every failing path raises the same
   actionable error naming `libs/install-xgboost.sh`.
 - What this deliberately is not: no training orchestration (no early

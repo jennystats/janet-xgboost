@@ -4,15 +4,18 @@
 # bound libxgboost is Apache-2.0 (no licence conflict; fresh ffi
 # binding, not a port).
 #
-# Pinned C API: xgboost 3.4.1 (official universal wheel artifact - CUDA
-# compiled in, CPU fallback; installer libs/install-xgboost.sh). The
+# Pinned C API: xgboost 3.4.1 (official wheels - linux x86_64 manylinux,
+# macOS arm64/x86_64; CUDA compiled in, CPU fallback; installer
+# libs/install-xgboost.sh). The
 # 2.1.4 -> 3.4.1 generation bump changed nothing in the bound surface
 # except XGBoostVersion returning void and CreateFromURI replacing
 # CreateFromFile (verified live, both generations, 22/22 probe stages
 # each).
 #
 # Lib resolution: $XGBOOST_LIB -> ~/.local/lib/xgboost/xgboost/lib/
-# libxgboost.so -> dlopen search. Import fails actionably if none loads.
+# (libxgboost.so on linux, libxgboost.dylib on macOS - the wheel
+# layouts differ) -> dlopen search. Import fails actionably if none
+# loads.
 #
 # Public API (thin, stable; behavioural spec: the api-contract):
 #   (version)                            -> [major minor patch]
@@ -46,13 +49,19 @@
 #==------------------------------------------------------------------------==#
 
 (defn/typed lib-path {:args [] :ret :string} []
-  "Resolve libxgboost.so: $XGBOOST_LIB, then the pinned home path,
-  then the bare soname for the system dlopen search."
+  "Resolve libxgboost: $XGBOOST_LIB, then the pinned home path
+  (libxgboost.so on linux, libxgboost.dylib on macOS), then the bare
+  soname for the system dlopen search."
   (def env (get (os/environ) "XGBOOST_LIB"))
   (if env env
-    (let [home (get (os/environ) "HOME")
-          pinned (string home "/.local/lib/xgboost/xgboost/lib/libxgboost.so")]
-      (if (not (nil? (os/stat pinned))) pinned "libxgboost.so"))))
+    (let [dir (string (get (os/environ) "HOME") "/.local/lib/xgboost/xgboost/lib/")
+          soname (if (= :macos (os/which)) "libxgboost.dylib" "libxgboost.so")
+          names [soname "libxgboost.so" "libxgboost.dylib"]]
+      (var hit nil)
+      (each n names
+        (when (and (nil? hit) (not (nil? (os/stat (string dir n)))))
+          (set hit (string dir n))))
+      (if hit hit soname))))
 
 (def lib (lib-path))
 (ffi/context lib)
