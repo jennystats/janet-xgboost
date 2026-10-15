@@ -93,8 +93,10 @@ error taxonomy and the libxgboost version coupling - is the contract:
 ## Install
 
 The module binds xgboost's C API over ffi, so it needs the pinned
-shared library (official universal wheel, sha256-verified, idempotent;
-CUDA compiled in with CPU fallback, so no GPU is required):
+shared library (official wheels, sha256-verified, idempotent; CUDA
+compiled in with CPU fallback, so no GPU is required). Platforms:
+Linux x86_64 and macOS (Apple silicon + Intel) from the official
+wheels; Windows is not supported - run the stack under WSL2.
 
 ```bash
 libs/install-xgboost.sh   # libxgboost 3.4.1 -> ~/.local/lib/xgboost/
