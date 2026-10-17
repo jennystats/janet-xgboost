@@ -1,6 +1,6 @@
 #!/bin/bash
 # Install the pinned xgboost C library for the janet-xgboost module
-# (janet-xgboost.janet). GitHub ships no prebuilt lib; the official
+# (jennystats/xgboost.janet). GitHub ships no prebuilt lib; the official
 # prebuilt artifacts are the PyPI wheels (the xgboost project's own
 # release artifacts - no python is installed or used). Detects the
 # platform, fetches the matching official wheel, verifies sha256,
@@ -62,4 +62,4 @@ case "$OS" in
   *)      unzip -q -o "$TMP/$WHEEL" "xgboost/lib/libxgboost.so" "xgboost.libs/*" -d "$DEST"
           echo "installed: $DEST/xgboost/lib/libxgboost.so" ;;
 esac
-echo "usage    : (import janet-xgboost) - resolution: \$XGBOOST_LIB, then the path above"
+echo "usage    : (import jennystats/xgboost) - resolution: \$XGBOOST_LIB, then the path above"

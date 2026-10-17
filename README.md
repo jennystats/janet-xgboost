@@ -16,34 +16,36 @@ data and statistics packages. Jenny is just Janet.
 
 ## Import
 
-Import: `(import janet-xgboost)`, call sites
-`(janet-xgboost/predict ...)`. Shorter call sites via
-`(import janet-xgboost :as xgboost)` - the form used in our tests
-and benches.
+Import: `(import jennystats/xgboost)`, call sites
+`(xgboost/predict ...)`. Shorter call sites via
+`(import jennystats/xgboost :as xgboost)` - the form used in our tests
+and benches. All jenny modules install under a `jennystats/`
+namespace directory - collision-proof against bare-name shadowing,
+by construction.
 
 ## Example
 
 ```janet
-(import janet-xgboost)
+(import jennystats/xgboost)
 
 (def cols [[0.1 0.9 0.4 0.7] [0.2 0.8 0.5 0.1]])  # column-major
 (def labels [1.0 4.0 2.0 3.0])
 
-(with [dmx (janet-xgboost/dmatrix-from-columns cols labels)]
-  (def bst (-> (janet-xgboost/booster @[dmx] {:objective "reg:squarederror"
+(with [dmx (xgboost/dmatrix-from-columns cols labels)]
+  (def bst (-> (xgboost/booster @[dmx] {:objective "reg:squarederror"
                                               :seed 42})
-               (janet-xgboost/train dmx 10)))
-  (printf "%q" (janet-xgboost/predict bst dmx)))
+               (xgboost/train dmx 10)))
+  (printf "%q" (xgboost/predict bst dmx)))
 # @[1.3011019229888916 3.6988980770111084 2.0694849491119385 2.9305150508880615]
 ```
 
 The same fixture via the janet-num packed handle:
 
 ```janet
-(import janet-num)
-(import janet-xgboost :as xgboost)
+(import jennystats/num)
+(import jennystats/xgboost :as xgboost)
 
-(def packed (janet-num/pack-columns-f32 cols))  # {:ptr :nrow :ncol :free}
+(def packed (num/pack-columns-f32 cols))  # {:ptr :nrow :ncol :free}
 (with [dmx (xgboost/dmatrix-from-packed packed labels)]
   # train and predict as above; predictions bitwise-identical
   # to the columns route
