@@ -41,7 +41,7 @@
 # missing-:ptr argument (never a C-level segfault; the v1.2 guards).
 
 (import typed :prefix "")
-(import json)
+(import janet-json)
 (import janet-num) # the ingest transpose runs in the janet-num C kernel
 
 #==------------------------------------------------------------------------==#
@@ -171,7 +171,7 @@
   (when (empty? (string/trim path))
     (errorf "xgboost: dmatrix-from-file requires a non-empty path URI"))
   (def out (ffi/write :ptr nil))
-  (ok! (XGDMatrixCreateFromURI (json/encode {:uri path}) out) "create dmatrix from uri")
+  (ok! (XGDMatrixCreateFromURI (janet-json/encode {:uri path}) out) "create dmatrix from uri")
   (def ptr (ffi/read :ptr out))
   (def [nrow ncol] (dmx-shape ptr))
   (make-dmx ptr nrow ncol))

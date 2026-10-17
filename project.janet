@@ -3,7 +3,7 @@
   :name "janet-xgboost"
   :description "In-process xgboost for Janet via core ffi - two ingest routes, bitwise conformance with the official wheel"
   :license "AGPL-3.0"
-  :version "0.1.0")
+  :version "0.1.1")
 
 (declare-source
   :source ["janet-xgboost.janet"]
