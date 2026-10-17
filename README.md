@@ -14,14 +14,19 @@ handle, which crosses to the library with zero Janet elements.
 Part of [Jenny Stats](https://github.com/jennystats), a home for Janet
 data and statistics packages. Jenny is just Janet.
 
-## Import
+## Quick start
 
-Import: `(import jennystats/xgboost)`, call sites
-`(xgboost/predict ...)`. Shorter call sites via
-`(import jennystats/xgboost :as xgboost)` - the form used in our tests
-and benches. All jenny modules install under a `jennystats/`
-namespace directory - collision-proof against bare-name shadowing,
-by construction.
+All jenny modules install under a `jennystats/` namespace directory:
+`(import jennystats/xgboost)` - collision-proof against bare-name
+shadowing of core symbols or other packages, by construction.
+
+```janet
+(import jennystats/xgboost :as xgboost)
+```
+
+The `:as` alias is the form used in this repo's tests and benches;
+the plain import gives the same call sites with the `xgboost/`
+prefix.
 
 ## Example
 
