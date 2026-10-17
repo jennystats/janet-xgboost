@@ -1,4 +1,4 @@
-# janet-xgboost.janet - in-process xgboost for janet via core ffi.
+# jennystats/xgboost.janet - in-process xgboost for janet via core ffi.
 #
 # Public package: janet-xgboost. License: AGPLv3 (see LICENSE). The
 # bound libxgboost is Apache-2.0 (no licence conflict; fresh ffi
@@ -40,9 +40,9 @@
 # taking fns raise the type-guard error class on a wrong-kind or
 # missing-:ptr argument (never a C-level segfault; the v1.2 guards).
 
-(import typed :prefix "")
-(import janet-json)
-(import janet-num) # the ingest transpose runs in the janet-num C kernel
+(import jennystats/typed :prefix "")
+(import jennystats/json)
+(import jennystats/num) # the ingest transpose runs in the janet-num C kernel
 
 #==------------------------------------------------------------------------==#
 # Lib resolution
@@ -171,7 +171,7 @@
   (when (empty? (string/trim path))
     (errorf "xgboost: dmatrix-from-file requires a non-empty path URI"))
   (def out (ffi/write :ptr nil))
-  (ok! (XGDMatrixCreateFromURI (janet-json/encode {:uri path}) out) "create dmatrix from uri")
+  (ok! (XGDMatrixCreateFromURI (json/encode {:uri path}) out) "create dmatrix from uri")
   (def ptr (ffi/read :ptr out))
   (def [nrow ncol] (dmx-shape ptr))
   (make-dmx ptr nrow ncol))
@@ -217,7 +217,7 @@
   "Typed core of dmatrix-from-columns: column-major arrays transposed
   to the row-major f32 buffer in one janet-num C pass, then
   CreateFromMat. Guards (empty, ragged) live in the pack kernel."
-  (def packed (janet-num/pack-columns-f32 cols))
+  (def packed (num/pack-columns-f32 cols))
   (defer (:free packed)
     (def out (ffi/write :ptr nil))
     (ok! (XGDMatrixCreateFromMat (packed :ptr) (packed :nrow) (packed :ncol)

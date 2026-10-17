@@ -2,16 +2,16 @@
 
 Prose contract (a formal specification language is not the right tool
 here; the xgboost C API is the external truth). Canonical signatures: the module
-docstrings in `janet-xgboost.janet`. This document adds what
+docstrings in `jennystats/xgboost.janet`. This document adds what
 signatures cannot carry: preconditions, effects, ownership, the type
-matrix and the error taxonomy. Binding truth: `janet-xgboost.janet`
+matrix and the error taxonomy. Binding truth: `jennystats/xgboost.janet`
 (ffi/defbind,
 pinned to libxgboost 3.4.1 from
 `libs/install-xgboost.sh`); external truth: the xgboost C API.
 
 ## 1. Layering
 
-- **Janet wrapper layer** (janet-xgboost.janet): handle construction,
+- **Janet wrapper layer** (jennystats/xgboost.janet): handle construction,
   parameter stringification, prediction reshaping, actionable errors.
   Minimal by design - the C API is small and stable, and the wrapper
   adds no validation the C layer does not already do better.
@@ -47,9 +47,9 @@ Import style (canonical, every doc and example copies this form;
 `janet-xgboost` is the house module name):
 
 ```
-(import janet-xgboost)              # long form: calls are
-                                    # janet-xgboost/predict, ...
-(import janet-xgboost :as xgb)      # the :as alias is the user-side
+(import jennystats/xgboost)              # long form: calls are
+                                    # xgboost/predict, ...
+(import jennystats/xgboost :as xgb)      # the :as alias is the user-side
                                     # option (the form the examples
                                     # below use)
 ```
@@ -66,7 +66,7 @@ Public surface (everything else in the module is internal):
 (dmatrix-from-columns cols &opt labels) -> dmatrix handle {:ptr :nrow :ncol :close}
                                       (cols: array of column-major arrays)
 (dmatrix-from-packed packed &opt labels) -> dmatrix handle
-                                      (packed: janet-num/duckdb f32 handle)
+                                      (packed: num/duckdb f32 handle)
 (dmx-set-label dmx labels)          -> dmx  (chain)
 (booster &opt dmats params)         -> booster handle
                                       (dmats: array of dmatrix handles, default

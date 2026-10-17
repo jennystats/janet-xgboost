@@ -6,7 +6,7 @@
   :version "0.1.1")
 
 (declare-source
-  :source ["janet-xgboost.janet"]
+  :source ["jennystats/xgboost.janet"]
   :dependencies ["https://github.com/jennystats/janet-kit"
                  "https://github.com/jennystats/janet-num"
                  "https://github.com/jennystats/janet-json"])

@@ -8,9 +8,9 @@
 # Expected values recorded from the pinned official wheel lib 2.1.4
 # and verified unchanged on 3.4.1 (nthread=1, seed=42 -> bitwise-stable
 # across runs and processes).
-(import janet-xgboost :as xgboost)
-(import typed :prefix "")
-(import janet-num)
+(import jennystats/xgboost :as xgboost)
+(import jennystats/typed :prefix "")
+(import jennystats/num)
 
 (defn assert-eq [a b msg]
   (unless (deep= a b) (errorf "FAIL %s: %q != %q" msg a b)))
@@ -63,7 +63,7 @@
 # A janet-num pack handle crosses with zero janet elements; the packed
 # route must be bitwise-identical to the columns route on the same
 # data (the contract's parity guarantee, section 7).
-(def packed (janet-num/pack-columns-f32 FEATURES-COLS))
+(def packed (num/pack-columns-f32 FEATURES-COLS))
 (assert-eq [(packed :nrow) (packed :ncol)] [4 2] "pack handle shape")
 (def pdmx (xgboost/dmatrix-from-packed packed LABELS))
 (assert-eq [(pdmx :nrow) (pdmx :ncol)] [4 2] "packed dmatrix shape keys")
@@ -158,7 +158,7 @@
                  nan-dmx))
 (assert-eq (length nan-preds) 4 "NaN cells: prediction count intact")
 (each p nan-preds (assert (not (= p math/nan)) "NaN cells: predictions finite"))
-(def packed-nan (janet-num/pack-columns-f32 NAN-COLS))
+(def packed-nan (num/pack-columns-f32 NAN-COLS))
 (def nan-pdmx (xgboost/dmatrix-from-packed packed-nan LABELS))
 (def nan-ppreds (xgboost/predict
                   (xgboost/train (xgboost/booster [nan-pdmx] PARAMS)
@@ -174,7 +174,7 @@
 (def z-dmx (xgboost/dmatrix-from-columns [[] []]))
 (assert-eq [(z-dmx :nrow) (z-dmx :ncol)] [0 2] "0-row dmatrix constructs")
 (assert-eq (xgboost/predict bst z-dmx) @[] "0-row predict returns empty array")
-(def z-pdmx (xgboost/dmatrix-from-packed (janet-num/pack-columns-f32 [[] []])))
+(def z-pdmx (xgboost/dmatrix-from-packed (num/pack-columns-f32 [[] []])))
 (assert-eq (xgboost/predict bst z-pdmx) @[]
            "0-row packed-route predict returns empty array")
 
