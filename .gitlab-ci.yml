@@ -7,6 +7,7 @@ include:
     file: /templates/gate.yml
     inputs:
       project_name: "janet-xgboost"
+      module_name: "xgboost"
       janet_setup: "libs/install-xgboost.sh"
       native_needs: "xgboost"
       pm_expected_red: "true"
